@@ -17,6 +17,6 @@ namespace Kitap.arama.SubeAbstarct
         Task<Sube> GetBySubeID(int id);
 
         Task<Sube> UpdateSube(Sube sube);
-
+        
     }
 }

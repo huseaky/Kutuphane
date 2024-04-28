@@ -1,19 +1,24 @@
 ﻿using Kitap.arama.Abstarct;
+using Kitap.arama.Enum;
 using Kütüphane.Entitiy;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kitap.arama.Constract
 {
-    public class KitapController : IKitap
+    public class KitapService : IKitap
     {
         private readonly KütüphaneContext _kütüphaneContext;
-        public KitapController(KütüphaneContext kütüphaneContext)
+        public KitapService(KütüphaneContext kütüphaneContext)
         {
             _kütüphaneContext = kütüphaneContext;
         }
         public async Task<Book> CreateKitap(Book book)
         {
-            await _kütüphaneContext.Books.AddAsync(book);
+            if(book.Kategori==Kategori.Korku)
+            {
+                book.KitapAdı = $"böööğğö - {book.KitapAdı }";
+            }
+            await _kütüphaneContext.Books.AddAsync(book);           
             await _kütüphaneContext.SaveChangesAsync();
             return book;
         }
@@ -32,6 +37,7 @@ namespace Kitap.arama.Constract
         {
 
             return await _kütüphaneContext.Books.ToListAsync();
+            
         }
 
         public async Task<Book> GetKitapById(int id)

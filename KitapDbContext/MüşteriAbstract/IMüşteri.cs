@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kitap.arama.Models.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +10,13 @@ namespace Kitap.arama.MüşteriAbstract
     public interface IMüşteri
     {
         Task<List<Müşteri>> GetAllMüşteri();
-        Task<Müşteri> CreateMüşteri(Müşteri müşteri);
+        Task<Müşteri> CreateMüşteri(MüşteriDTO müşteri);
 
         void DeleteMüşteri(int id);
 
         Task<Müşteri> GetByMüşteriID(int id);
 
-        Task<Müşteri> GetByMüşteriName(Müşteri müşteri);
+        Task<Müşteri> GetByMüşteriName(string name);
 
 
         Task<Müşteri> UpdateMüşteri(Müşteri müşteri);

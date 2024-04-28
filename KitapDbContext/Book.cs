@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Kitap.arama;
+using Kitap.arama.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Kütüphane.Entitiy
@@ -9,8 +11,8 @@ namespace Kütüphane.Entitiy
         public int ID { get; set; }
         [StringLength(100)]
         public string KitapAdı { get; set; }
-
-        public Kategori 
+        public virtual Müşteri? Müşteri { get; set; }
+        public Kategori Kategori { get; set; }
 
     }
 }

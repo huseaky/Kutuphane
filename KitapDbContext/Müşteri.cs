@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kütüphane.Entitiy;
 
 namespace Kitap.arama
 {
@@ -17,10 +18,10 @@ namespace Kitap.arama
         [StringLength(100)]
         public string MüşteriSoyAd { get; set; }
         public int KiralananKitapSayısı { get; set; }
-
+       
         public int OkunanKitapSayısı { get; set; }
-        [StringLength(100)]
-        public string KiralananKitaplar { get; set; }
+        public virtual ICollection<Book> Books { get; set; }
+        
 
 
 

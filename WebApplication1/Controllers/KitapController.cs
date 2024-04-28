@@ -1,21 +1,16 @@
-﻿using Kitap.arama;
-using Kitap.arama.Abstarct;
-using Kitap.arama.Constract;
-using Kitap.arama.MüşteriAbstract;
+﻿using Kitap.arama.Abstarct;
 using Kütüphane.Entitiy;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace WebApplication1.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KütüphaneController : ControllerBase
+    public class KitapController : ControllerBase
     {
         private readonly IKitap _ıkitap;
 
-        public KütüphaneController(IKitap ıkitap)
+        public KitapController(IKitap ıkitap)
         {
             _ıkitap = ıkitap;
         }
@@ -27,7 +22,7 @@ namespace WebApplication1.Controller
             return Ok(kitap);
         }
         [HttpGet]
-        [Route("[action]/(name)")]
+        [Route("[action]/(id)")]
         public async Task<IActionResult>GetKitapById(int id)
         {
             var kitap = await _ıkitap.GetKitapById(id);
@@ -51,8 +46,10 @@ namespace WebApplication1.Controller
         [HttpPost]
         public async Task<IActionResult> PostKitap([FromBody]Book book )
         {
-            var createdKitap = await _ıkitap.UpdateKitap(book);
-            return CreatedAtAction("get", new { id = createdKitap.ID },createdKitap);
+            var createdKitap = await _ıkitap.CreateKitap(book);
+            return Ok(createdKitap);
+
+        
         }
         [HttpPut]
         public async Task<IActionResult> PutKitap([FromBody]Book book)
@@ -61,6 +58,7 @@ namespace WebApplication1.Controller
             {
                 return Ok(await _ıkitap.UpdateKitap(book));
             }
+           
             return NotFound();
         }
         [HttpDelete("{id}")]
@@ -73,5 +71,6 @@ namespace WebApplication1.Controller
             }
             return NotFound();
         }
+
     }
 }

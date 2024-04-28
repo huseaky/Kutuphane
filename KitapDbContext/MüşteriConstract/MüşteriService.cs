@@ -1,26 +1,37 @@
-﻿using Kitap.arama.MüşteriAbstract;
+﻿using Kitap.arama.Models.DTOs;
+using Kitap.arama.MüşteriAbstract;
+using Kütüphane.Entitiy;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Kitap.arama.MüşteriConstract
 {
-    public class Müşteri : IMüşteri
+    public class MüşteriService : IMüşteri
     {
         private readonly KütüphaneContext _kütüphaneContext;
-        public Müşteri(KütüphaneContext kütüphaneContext)
+        public MüşteriService(KütüphaneContext kütüphaneContext)
         {
             _kütüphaneContext = kütüphaneContext;
 
         }
-        public async Task<arama.Müşteri> CreateMüşteri(arama.Müşteri müşteri)
+        public async Task<Müşteri> CreateMüşteri(MüşteriDTO müşteri)
         {
-            await _kütüphaneContext.Müşteris.AddAsync(müşteri);
+            Müşteri _müşteri = new()
+            {
+                MüşteriAd=müşteri.MüşteriAd,
+                MüşteriSoyAd=müşteri.MüşteriSoyAd,
+                KiralananKitapSayısı=0,
+                OkunanKitapSayısı =0
+                
+            };
+            foreach(int id in müşteri.BookIds)
+            {
+                Book? foundbook=await _kütüphaneContext.Books.FirstOrDefaultAsync(x=>x.ID==id);
+                _müşteri.Books.Add(foundbook);
+                
+            }
+            await _kütüphaneContext.Müşteris.AddAsync(_müşteri);
             await _kütüphaneContext.SaveChangesAsync();
-            return müşteri;
+            return _müşteri;
+      
 
         }
 
@@ -34,13 +45,13 @@ namespace Kitap.arama.MüşteriConstract
             }
         }
 
-        public async Task<List<arama.Müşteri>> GetAllMüşteri()
+        public async Task<List<Müşteri>> GetAllMüşteri()
         {
           var a = await _kütüphaneContext.Müşteris.ToListAsync();
             return a;
         }
 
-        public async Task<arama.Müşteri> GetByMüşteriID(int id)
+        public async Task<Müşteri> GetByMüşteriID(int id)
         {
             var a = await _kütüphaneContext.Müşteris.FirstOrDefaultAsync(x=>x.MüşteriID == id);
             if (a != null)
@@ -53,9 +64,9 @@ namespace Kitap.arama.MüşteriConstract
             }
         }
 
-        public async Task<arama.Müşteri> GetByMüşteriName(arama.Müşteri müşteri)
+        public async Task<Müşteri> GetByMüşteriName(string name)
         {
-            var a = await _kütüphaneContext.Müşteris.FirstOrDefaultAsync(x => x.MüşteriAd==müşteri.MüşteriAd  );
+            var a = await _kütüphaneContext.Müşteris.FirstOrDefaultAsync(x => x.MüşteriAd==name);
             if (a != null)
             {
                 return a;
@@ -66,7 +77,9 @@ namespace Kitap.arama.MüşteriConstract
             }
         }
 
-        public async Task<arama.Müşteri> UpdateMüşteri(arama.Müşteri müşteri)
+      
+
+        public async Task<Müşteri> UpdateMüşteri(Müşteri müşteri)
         {
             var a = await    _kütüphaneContext.Müşteris.FirstOrDefaultAsync(x => x.MüşteriAd == müşteri.MüşteriAd);
             if (a != null)

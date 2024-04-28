@@ -18,8 +18,14 @@ namespace Kitap.arama
             optionsBuilder.UseSqlServer("Server = DESKTOP-4GLN31H\\SQLEXPRESS; Database = Kütüphane; Trusted_Connection = True;Trust Server Certificate=True;");
 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Book>().HasKey(k => k.ID);
+
+         
+        }
+
         public DbSet<Book> Books { get; set; }
-        public DbSet<KütüphaneContext> Kütüphanes { get; set; }
 
         public DbSet<Worder> Worders { get; set; }
 

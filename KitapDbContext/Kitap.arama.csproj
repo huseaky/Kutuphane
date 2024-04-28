@@ -14,8 +14,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Kütüphane.Entitiy\Kütüphane.Entitiy.csproj" />
-  </ItemGroup>
-
 </Project>

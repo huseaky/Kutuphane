@@ -9,16 +9,16 @@ using Kitap.arama.Constract;
 using Kitap.arama.Constract;
 using Kitap.arama.ConstractWorker;
 using Kitap.arama.AbstractWorker;
-using Müþteri = Kitap.arama.MüþteriConstract.Müþteri;
+using MüþteriService = Kitap.arama.MüþteriConstract.MüþteriService;
 using Sube = Kitap.arama.SubeConstract.Sube;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllers();
-builder.Services.AddScoped<IMüþteri, Müþteri>();
+builder.Services.AddScoped<IMüþteri, MüþteriService>();
 builder.Services.AddScoped<ISubeler,Sube >();
-builder.Services.AddScoped<IKitap,KitapController >();
+builder.Services.AddScoped<IKitap,KitapService >();
 builder.Services.AddScoped<IWorker, Worker>();
 builder.Services.AddScoped<KütüphaneContext>();
 
