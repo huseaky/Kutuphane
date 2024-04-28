@@ -2,6 +2,7 @@
 using Kitap.arama.MüşteriAbstract;
 using Kütüphane.Entitiy;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 namespace Kitap.arama.MüşteriConstract
 {
     public class MüşteriService : IMüşteri
@@ -16,33 +17,42 @@ namespace Kitap.arama.MüşteriConstract
         {
             Müşteri _müşteri = new()
             {
-                MüşteriAd=müşteri.MüşteriAd,
-                MüşteriSoyAd=müşteri.MüşteriSoyAd,
-                KiralananKitapSayısı=0,
-                OkunanKitapSayısı =0
-                
+                MüşteriAd = müşteri.MüşteriAd,
+                MüşteriSoyAd = müşteri.MüşteriSoyAd,
+                KiralananKitapSayısı = 0,
+                OkunanKitapSayısı = 0,
+                Books = new List<Book>()
             };
-            foreach(int id in müşteri.BookIds)
+
+            if (!müşteri.BookIds.IsNullOrEmpty())
             {
-                Book? foundbook=await _kütüphaneContext.Books.FirstOrDefaultAsync(x=>x.ID==id);
-                _müşteri.Books.Add(foundbook);
-                
+                foreach (int id in müşteri.BookIds)
+                {
+                    Book? foundbook = await _kütüphaneContext.Books.FirstOrDefaultAsync(x => x.ID == id);
+                    if (foundbook == null)
+                    {
+                        continue;
+                    }
+                    _müşteri.Books.Add(foundbook);
+                }
             }
+
             await _kütüphaneContext.Müşteris.AddAsync(_müşteri);
             await _kütüphaneContext.SaveChangesAsync();
             return _müşteri;
-      
-
         }
 
-        public async void DeleteMüşteri(int id)
+        public async Task<bool> DeleteMüşteri(int id)
         {
-            var a= await _kütüphaneContext.Müşteris.FirstOrDefaultAsync(x=>x.MüşteriID==id);
+            var a= await _kütüphaneContext.Müşteris.Include(x => x.Books).FirstOrDefaultAsync(x=>x.MüşteriID==id);
             if (a!=null)
             {
-                _kütüphaneContext.Remove(id);
+                a.Books.Clear();
+                _kütüphaneContext.Müşteris.Remove(a);
                 await _kütüphaneContext.SaveChangesAsync() ;
+                return true;
             }
+            return false;
         }
 
         public async Task<List<Müşteri>> GetAllMüşteri()

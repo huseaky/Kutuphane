@@ -12,7 +12,7 @@ namespace Kitap.arama.MüşteriAbstract
         Task<List<Müşteri>> GetAllMüşteri();
         Task<Müşteri> CreateMüşteri(MüşteriDTO müşteri);
 
-        void DeleteMüşteri(int id);
+        Task<bool> DeleteMüşteri(int id);
 
         Task<Müşteri> GetByMüşteriID(int id);
 

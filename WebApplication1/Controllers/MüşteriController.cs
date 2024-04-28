@@ -23,6 +23,7 @@ namespace WebApplication1.Controllers
             var a = await _ımüşteri.GetAllMüşteri();
             return Ok(a);
         }
+
         [HttpGet]
         [Route("[action]/(name)")]
         public async Task<IActionResult> GetMusteriName(string names)
@@ -65,7 +66,7 @@ namespace WebApplication1.Controllers
         {
             if (await _ımüşteri.GetByMüşteriID(id)!=null)
             {
-                _ımüşteri.DeleteMüşteri(id);
+                await _ımüşteri.DeleteMüşteri(id);
                 return Ok();
             }
             return NotFound();
